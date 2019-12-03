@@ -8,8 +8,8 @@ const train1b = fs.readFileSync('train_1_b.txt').toString().trim().split(',')
 //INIT PARAMS
 let grid = []
 let wire = []
-let dir
-let value
+let direction
+let numberOfSteps
 let currX = 0
 let currY = 0
 let steps = 0
@@ -25,11 +25,11 @@ wire.push({
 
 // PROCESS FIRST WIRE
 firstWire.forEach((itm) => {
-    dir = itm.charAt(0)
-    value = itm.slice(1)
+    direction = itm.charAt(0)
+    numberOfSteps = itm.slice(1)
 
-    if (dir === 'R') {
-        for (let i = 0; i < value; i++) {
+    if (direction === 'R') {
+        for (let i = 0; i < numberOfSteps; i++) {
             currX ++
             steps ++
             wire.push({
@@ -39,8 +39,8 @@ firstWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'L') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'L') {
+        for (let i = 0; i < numberOfSteps; i++) {
             --currX
             steps ++
             wire.push({
@@ -50,8 +50,8 @@ firstWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'U') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'U') {
+        for (let i = 0; i < numberOfSteps; i++) {
             currY ++
             steps ++
             wire.push({
@@ -61,8 +61,8 @@ firstWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'D') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'D') {
+        for (let i = 0; i < numberOfSteps; i++) {
             --currY
             steps ++
             wire.push({
@@ -94,11 +94,11 @@ wire.push({
 
 //PROCESS SECOND WIRE
 secondWire.forEach((itm) => {
-    dir = itm.charAt(0)
-    value = itm.slice(1)
+    direction = itm.charAt(0)
+    numberOfSteps = itm.slice(1)
 
-    if (dir === 'R') {
-        for (let i = 0; i < value; i++) {
+    if (direction === 'R') {
+        for (let i = 0; i < numberOfSteps; i++) {
             currX ++
             steps ++
             wire.push({
@@ -108,8 +108,8 @@ secondWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'L') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'L') {
+        for (let i = 0; i < numberOfSteps; i++) {
             --currX
             steps ++
             wire.push({
@@ -119,8 +119,8 @@ secondWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'U') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'U') {
+        for (let i = 0; i < numberOfSteps; i++) {
             currY ++
             steps ++
             wire.push({
@@ -130,8 +130,8 @@ secondWire.forEach((itm) => {
                 steps: steps
             })
         }
-    } else if (dir === 'D') {
-        for (let i = 0; i < value; i++) {
+    } else if (direction === 'D') {
+        for (let i = 0; i < numberOfSteps; i++) {
             --currY
             steps ++
             wire.push({
@@ -170,6 +170,6 @@ crossings.forEach((itm) => {
 })
 
 //DISPLAY RESULTS
-//FIRST VALUE IN SORTED ARRAY IS THE ANSWER
+//FIRST numberOfSteps IN SORTED ARRAY IS THE ANSWER
 console.log(distances.sort())
 console.log(shortestSteps.sort())
