@@ -8,8 +8,8 @@ const train1b = fs.readFileSync('train_1_b.txt').toString().trim().split(',')
 //INIT PARAMS
 let grid = []
 let wire = []
-let direction
-let numberOfSteps
+let direction = ''
+let numberOfSteps = 0
 let currX = 0
 let currY = 0
 let steps = 0
@@ -22,12 +22,8 @@ wire.push({
     steps: steps
 })
 
-
-// PROCESS FIRST WIRE
-firstWire.forEach((itm) => {
-    direction = itm.charAt(0)
-    numberOfSteps = itm.slice(1)
-
+//FUNCTION FOR WALKING THE WIRE
+const walkTheWire = function (wire, whichOne, direction, numberOfSteps) {
     if (direction === 'R') {
         for (let i = 0; i < numberOfSteps; i++) {
             currX ++
@@ -73,9 +69,20 @@ firstWire.forEach((itm) => {
             })
         }
     }
+}
+
+
+// PROCESS FIRST WIRE
+train1a.forEach((item) => {
+    direction = item.charAt(0) //FIRST CHARACTER SETS DIRETION IN GRID
+    numberOfSteps = item.slice(1) //AFTER FIRST CHARACTER GETS THE NUMBER OF STEPS
+
+    walkTheWire(wire, 1, direction, numberOfSteps)
 })
 
 grid.push(wire)
+
+
 
 
 // RESET INIT PARAMS
@@ -93,58 +100,16 @@ wire.push({
 
 
 //PROCESS SECOND WIRE
-secondWire.forEach((itm) => {
-    direction = itm.charAt(0)
-    numberOfSteps = itm.slice(1)
+train1b.forEach((item) => {
+    direction = item.charAt(0) //FIRST CHARACTER SETS DIRETION IN GRID
+    numberOfSteps = item.slice(1) //AFTER FIRST CHARACTER GETS THE NUMBER OF STEPS
 
-    if (direction === 'R') {
-        for (let i = 0; i < numberOfSteps; i++) {
-            currX ++
-            steps ++
-            wire.push({
-                wire: 2,
-                x: currX,
-                y: currY,
-                steps: steps
-            })
-        }
-    } else if (direction === 'L') {
-        for (let i = 0; i < numberOfSteps; i++) {
-            --currX
-            steps ++
-            wire.push({
-                wire: 2,
-                x: currX,
-                y: currY,
-                steps: steps
-            })
-        }
-    } else if (direction === 'U') {
-        for (let i = 0; i < numberOfSteps; i++) {
-            currY ++
-            steps ++
-            wire.push({
-                wire: 2,
-                x: currX,
-                y: currY,
-                steps: steps
-            })
-        }
-    } else if (direction === 'D') {
-        for (let i = 0; i < numberOfSteps; i++) {
-            --currY
-            steps ++
-            wire.push({
-                wire: 2,
-                x: currX,
-                y: currY,
-                steps: steps
-            })
-        }
-    }
+    walkTheWire(wire, 2, direction, numberOfSteps)
 })
 
 grid.push(wire)
+
+
 
 
 //FIND WHERE WIRES CROSS
@@ -160,6 +125,8 @@ grid[0].forEach((wire1) => {
         }
     })
 })
+
+
 
 //CALCULATE SHORTEST ROUTE TO INTERSECTION
 let distances = []
