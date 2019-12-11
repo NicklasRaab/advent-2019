@@ -7,10 +7,6 @@ class Planet {
     addOrbit(planet) {
         this.orbits = planet
     }
-
-    testing() {
-
-    }
 }
 
 module.exports = Planet
