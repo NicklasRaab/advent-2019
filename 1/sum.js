@@ -12,7 +12,7 @@ function calcFuelWeight(moduleFuel) {
 
 let fuelWeight
 
-let fuel = fs.readFileSync('values.txt').toString().trim().split('\n').reduce((acc, current) => {
+let fuel = fs.readFileSync('values.txt').toString().trim().split('\r').reduce((acc, current) => {
     fuelWeight = Math.floor(current / 3) - 2
     fuelWeight += calcFuelWeight(fuelWeight)
     return acc + fuelWeight
