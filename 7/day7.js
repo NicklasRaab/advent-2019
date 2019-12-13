@@ -1,4 +1,6 @@
 const IntcodeComputer = require('./intcode_computer')
+const Amplifier = require('./amplifier')
+const AmplifierSeries = require('./amplifier_series')
 
 const puzzleInput = [3,8,1001,8,10,8,105,1,0,0,21,42,55,64,85,98,179,260,341,422,99999,3,9,101,2,9,9,102,5,9,9,1001,9,2,9,1002,9,5,9,4,9,99,3,9,1001,9,5,9,1002,9,4,9,4,9,99,3,9,101,3,9,9,4,9,99,3,9,1002,9,4,9,101,3,9,9,102,5,9,9,101,4,9,9,4,9,99,3,9,1002,9,3,9,1001,9,3,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,101,1,9,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,2,9,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,101,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,99,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,99,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,99]
 
@@ -32,25 +34,26 @@ function perm(xs) {
 let sequences = perm([0,1,2,3,4])
 // end of copy
 
-
-let amplifiers = []
+let amplifier_series = []
+const amplifier_names = ['A','B','C','D','E']
 for (var i = 0; i < sequences.length; i++) {
-    amplifiers.push([])
+
+    let series = new AmplifierSeries(sequences[i], puzzleInput)
+
     for (var j = 0; j < 5; j++) {
-        if (j == 0) {
-            amplifiers[i].push(new IntcodeComputer(sequences[i][j], 0, puzzleInput))
-        } else {
-            let previous_output = amplifiers[i][j - 1].output
-            amplifiers[i].push(new IntcodeComputer(sequences[i][j], previous_output, puzzleInput))
-        }
-        amplifiers[i][j].process()
+        let intcode_computer = new IntcodeComputer()
+        let amplifier = new Amplifier(amplifier_names[j], intcode_computer)
+        series.addAmplifier(amplifier)
     }
+
+    series.run()
+    amplifier_series.push(series)
 }
 
 let highest_signal = 0
-for (let i = 0; i < amplifiers.length; i++) {
-    if (amplifiers[i][4].output > highest_signal) {
-        highest_signal = amplifiers[i][4].output
+for (let i = 0; i < amplifier_series.length; i++) {
+    if (amplifier_series[i].highestSignal > highest_signal) {
+        highest_signal = amplifier_series[i].highestSignal
     }
 }
 

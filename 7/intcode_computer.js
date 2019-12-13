@@ -1,23 +1,36 @@
 class IntcodeComputer {
-    constructor(input, previous_signal, puzzleinput) {
+    constructor() {
         this.pointer = 0
         this.instruction = '',
         this.opcode = undefined,
         this.params = [],
-        this.input = input,
-        this.previous_signal = previous_signal,
-        this.puzzle = puzzleinput,
+        this.input = 0,
+        this.previous_signal = 0,
         this.run = true,
-        this.output = undefined
+        this.output = undefined,
+        this.puzzle = []
     }
 
-    process() {
+    process(puzzleInput, phaseSetting, previous_signal) {
+        this.puzzle = puzzleInput
+        this.input = phaseSetting
+        this.previous_signal = previous_signal
+        // console.log(this.input, this.previous_signal)
+
         while (this.run === true) {
             this.setInstruction()
             this.setOpcode()
             this.setParams()
             this.executeOpcode()
         }
+    }
+
+    setInput(input) {
+        this.input = input
+    }
+
+    setPreviousSignal(signal) {
+        this.previous_signal = signal
     }
 
     setInstruction() {
@@ -75,7 +88,7 @@ class IntcodeComputer {
         } else if (this.opcode == 4) {
 
             this.params[0] == 0 ? this.output = this.puzzle[this.puzzle[this.pointer + 1]] : this.output = this.puzzle[this.pointer + 1]
-            console.log('output:', this.output)
+            // console.log('output:', this.output)
             this.pointer += 2
 
         } else if (this.opcode == 5) {
@@ -125,10 +138,10 @@ class IntcodeComputer {
             this.pointer += 4
 
         } else if (this.opcode == 99) {
-            console.log('opcode 99')
+            // console.log('opcode 99')
             this.run = false
         } else {
-            console.log('run_error', this.pointer)
+            // console.log('run_error', this.pointer)
             this.run = false
         }
     }
