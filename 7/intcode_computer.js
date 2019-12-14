@@ -1,21 +1,20 @@
 class IntcodeComputer {
-    constructor() {
+    constructor(puzzle) {
         this.pointer = 0
         this.instruction = '',
         this.opcode = undefined,
         this.params = [],
         this.input = 0,
-        this.previous_signal = 0,
+        this.previous_amplifier_signal = 0,
         this.run = true,
         this.output = undefined,
-        this.puzzle = []
+        this.puzzle = puzzle,
+        this.feedback_loop = false
     }
 
-    process(puzzleInput, phaseSetting, previous_signal) {
-        this.puzzle = puzzleInput
+    process(phaseSetting, previous_signal) {
         this.input = phaseSetting
-        this.previous_signal = previous_signal
-        // console.log(this.input, this.previous_signal)
+        this.previous_amplifier_signal = previous_signal
 
         while (this.run === true) {
             this.setInstruction()
@@ -23,14 +22,6 @@ class IntcodeComputer {
             this.setParams()
             this.executeOpcode()
         }
-    }
-
-    setInput(input) {
-        this.input = input
-    }
-
-    setPreviousSignal(signal) {
-        this.previous_signal = signal
     }
 
     setInstruction() {
@@ -82,7 +73,7 @@ class IntcodeComputer {
             //*************
             //INPUT SET TO previous signal
             //*************
-            this.input = this.previous_signal
+            this.input = this.previous_amplifier_signal
             this.pointer += 2
 
         } else if (this.opcode == 4) {
@@ -90,6 +81,12 @@ class IntcodeComputer {
             this.params[0] == 0 ? this.output = this.puzzle[this.puzzle[this.pointer + 1]] : this.output = this.puzzle[this.pointer + 1]
             // console.log('output:', this.output)
             this.pointer += 2
+
+            //day 7 part 2
+            if (this.feedback_loop) {
+                console.log('test')
+                this.run = false
+            }
 
         } else if (this.opcode == 5) {
 

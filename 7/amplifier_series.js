@@ -1,9 +1,9 @@
 class AmplifierSeries {
-    constructor(sequence, puzzleInput) {
-        this.sequence = sequence,
-        this.puzzleInput = puzzleInput,
+    constructor(sequence) {
+        this.phase_settings = sequence,
         this.amplifiers = [],
-        this.highestSignal = 0
+        this.highest_signal = 0,
+        this.feedback_loop = false
     }
 
     addAmplifier(amplifier) {
@@ -12,14 +12,25 @@ class AmplifierSeries {
 
     run() {
         for (let i = 0; i < this.amplifiers.length; i++) {
-            let phaseSetting = this.sequence[i]
-            let previous_signal = 0
-            i == 0 ? previous_signal = 0 : previous_signal = this.amplifiers[i - 1].output
-
-            this.amplifiers[i].run(this.puzzleInput, phaseSetting, previous_signal)
+            if (i > 0 && i < this.amplifiers.length) {
+                let previous_amplifier_signal = this.amplifiers[i - 1].output_signal()
+                this.amplifiers[i].input_signal(previous_amplifier_signal)
+            }
+            this.amplifiers[i].run(this.phase_settings[i])
         }
+        this.highest_signal = this.amplifiers[4].output
+    }
 
-        this.highestSignal = this.amplifiers[4].output
+    activate_feedback_loop(activate) {
+        if (activate) {
+            this.feedback_loop = true
+        }
+    }
+
+    feedback_loop() {
+        while (this.feedback_loop) {
+
+        }
     }
 }
 
