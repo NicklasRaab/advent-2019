@@ -15,7 +15,7 @@ class IntcodeComputer {
     process(phaseSetting, previous_signal) {
         this.input = phaseSetting
         this.previous_amplifier_signal = previous_signal
-
+        this.run = true
         while (this.run === true) {
             this.setInstruction()
             this.setOpcode()
@@ -65,7 +65,7 @@ class IntcodeComputer {
             this.pointer += 4
 
         } else if (this.opcode == 3) {
-
+            console.log('input used:', this.input)
             //*************
             //SPECIAL INPUT
             //*************
@@ -77,14 +77,11 @@ class IntcodeComputer {
             this.pointer += 2
 
         } else if (this.opcode == 4) {
-
             this.params[0] == 0 ? this.output = this.puzzle[this.puzzle[this.pointer + 1]] : this.output = this.puzzle[this.pointer + 1]
-            // console.log('output:', this.output)
+            console.log('output:', this.output)
             this.pointer += 2
-
             //day 7 part 2
             if (this.feedback_loop) {
-                console.log('test')
                 this.run = false
             }
 
@@ -135,7 +132,7 @@ class IntcodeComputer {
             this.pointer += 4
 
         } else if (this.opcode == 99) {
-            // console.log('opcode 99')
+            console.log('opcode 99')
             this.run = false
         } else {
             // console.log('run_error', this.pointer)
